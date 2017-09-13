@@ -1,0 +1,271 @@
+{
+    "package..spec": {
+        "prefix": "pks",
+        "body": [
+            "CREATE OR REPLACE PACKAGE ${1:${TM_FILENAME}} AS",
+            "",
+            "$0",
+            "",
+            "END $1;",
+            "/"
+        ],
+        "description": "package spec"
+    },
+    "package..body": {
+        "prefix": "pkb",
+        "body": [
+            "CREATE OR REPLACE PACKAGE BODY ${1:TM_FILENAME} AS",
+            "",
+            "gLog LOGGER_O := LOGGER_O.withName(${2:prefix}\\$EXCEPTION_PKG.LOG_PREFIX||'.'||\\$\\$PLSQL_UNIT);",
+            "--------------------------------------------------------------------------------",
+            "--                        PRIVATE FUNCTIONS AND PROCEDURES",
+            "--------------------------------------------------------------------------------",
+            "PROCEDURE throw(pFunc IN VARCHAR2, pErr IN PLS_INTEGER, pMsg IN VARCHAR2) IS BEGIN gLog.error(pFunc||': ERR=['||pErr||']: '||pMsg); PK_APP_ERR.put($2\\$EXCEPTION_PKG.ERROR_DOMAIN, pErr, pMsg); END throw;",
+            "",
+            "--------------------------------------------------------------------------------",
+            "--                        PUBLIC FUNCTIONS AND PROCEDURES",
+            "--------------------------------------------------------------------------------",
+            "",
+            "$0",
+            "",
+            "END $1;",
+            "/"
+        ],
+        "description": "package body"
+    },
+
+    "type..spec": {
+        "prefix": "typo",
+        "body": [
+            "CREATE OR REPLACE TYPE ${1:${TM_FILENAME}} ${2:FORCE} ${3:AS OBJECT}",
+            "(",
+            "   $0",
+            ")${4: NOT INSTANTIABLE} ${5:NOT FINAL}",
+            "/"
+        ],
+        "description": "type spec"
+    },
+    "type..body": {
+        "prefix": "tyb",
+        "body": [
+            "CREATE OR REPLACE TYPE BODY ${1:${TM_FILENAME}} AS",
+            "$0",
+            "END;",
+            "/"
+        ],
+        "description": "type body"
+    },
+
+    "func..spec": {
+        "prefix": "func",
+        "body": [
+            "FUNCTION ${1:name}(",
+            "   ${2:param} IN ${3:param_type}",
+            ") RETURN ${4:return_type};"
+        ],
+        "description": "function spec"
+    },
+    "func": {
+        "prefix": "func",
+        "body": [
+            "FUNCTION ${1:name}(",
+            "   ${2:param} IN ${3:param_type}",
+            ") RETURN ${4:return_type}",
+            "IS",
+            "   vFn   VARCHAR2(30) := '$1';",
+            "BEGIN",
+            "   $0",
+            "END $1;"
+        ],
+        "description": "function"
+    },
+    "constructor": {
+        "prefix": "constr",
+        "body": [
+            "CONSTRUCTOR FUNCTION ${1:name}(",
+            "   ${2:param} IN ${3:param_type}",
+            ") RETURN SELF AS RESULT$0"
+        ],
+        "description": "constructor"
+    },
+
+    "proc..spec": {
+        "prefix": "proc",
+        "body": [
+            "PROCEDURE ${1:name}(",
+            "   ${2:param} IN ${3:param_type}",
+            ");"
+        ],
+        "description": "procedure spec"
+    },
+    "proc": {
+        "prefix": "proc",
+        "body": [
+            "PROCEDURE ${1:name}(",
+            "   ${2:param} IN ${3:param_type}",
+            ") IS",
+            "   vFn   VARCHAR2(30) := '$1';",
+            "BEGIN",
+            "   $0",
+            "END $1;"
+        ],
+        "description": "procedure"
+    },
+
+    "begin..end": {
+        "prefix": "begin",
+        "body": [
+            "BEGIN",
+            "   $0",
+            "END;"
+        ],
+        "description": "begin..end"
+    },
+
+    "is..begin..end": {
+        "prefix": "isb",
+        "body": [
+            "IS$0",
+            "BEGIN",
+            "END $1;"
+        ],
+        "description": "is..begin..end"
+    },
+
+    "if..end": {
+        "prefix": "if",
+        "body": [
+            "IF ${1:condition} THEN",
+            "   $0",
+            "END IF;"
+        ],
+        "description": "if..end"
+    },
+    "if..else..end": {
+        "prefix": "ifelse",
+        "body": [
+            "IF ${1:condition} THEN",
+            "   $2",
+            "ELSE",
+            "   $3",
+            "END IF;"
+        ],
+        "description": "if..else..end"
+    },
+    "elsif..": {
+        "prefix": "elsif",
+        "body": [
+            "ELSIF ${1:condition} THEN",
+            "   $0"
+        ],
+        "description": "elsif.."
+    },
+
+    "case..when..end": {
+        "prefix": "case",
+        "body": [
+            "CASE $1",
+            "   WHEN ${2:condition} THEN $3",
+            "   ELSE $4",
+            "END;"
+        ],
+        "description": "case..when..end"
+    },
+    "when..then": {
+        "prefix": "when",
+        "body": [
+            "WHEN ${1:condition} THEN $2"
+        ],
+        "description": "when..then"
+    },
+
+    "loop..end": {
+        "prefix": "loop",
+        "body": [
+            "LOOP",
+            "   $0",
+            "END LOOP;"
+        ],
+        "description": "loop..end"
+    },
+
+    "for..in": {
+        "prefix": "for",
+        "body": [
+            "FOR $1 IN $2 LOOP",
+            "   $0",
+            "END LOOP;"
+        ],
+        "description": "for..in"
+    },
+
+    "for..in..collection": {
+        "prefix": "for",
+        "body": [
+            "FOR i IN 1..${1:collection}.COUNT LOOP",
+            "   $0",
+            "END LOOP;"
+        ],
+        "description": "for..in..collection"
+    },
+
+    "exception_no_data": {
+        "prefix": "exception",
+        "body": [
+            "EXCEPTION WHEN NO_DATA_FOUND THEN",
+            "   $1;"
+        ],
+        "description": "exception no_data_found"
+    },
+    "exception_too_many": {
+        "prefix": "exception",
+        "body": [
+            "EXCEPTION WHEN TOO_MANY_ROWS THEN",
+            "   $1;"
+        ],
+        "description": "exception too_many_rows"
+    },
+    "exception_others": {
+        "prefix": "exception",
+        "body": [
+            "EXCEPTION WHEN ${1:others} THEN",
+            "   ${2:null};"
+        ],
+        "description": "exception others"
+    },
+    "coalesce": {
+        "prefix": "coal",
+        "body": [
+            "COALESCE(${1:arg1}, ${2:arg2})"
+        ],
+        "description": "COALESCE(arg1, ...)"
+    },
+    "cardinality": {
+        "prefix": "card",
+        "body": [
+            "CARDINALITY(${1:arg1})"
+        ],
+        "description": "CARDINALITY(object)"
+    },
+    "treat": {
+        "prefix": "trea",
+        "body": [
+            "TREAT(${1:object} AS ${2:type})"
+        ],
+        "description": "TREAT(object AS ...)"
+    },
+    "function-name": {
+        "prefix": "vfd",
+        "body": [
+            "vFn $0VARCHAR2(30) := '${1:name}';"
+        ],
+        "description": "vFn definition"
+    },
+    "bulk..collect": {
+        "prefix": "bulk",
+        "body": [
+            "BULK COLLECT INTO $0"
+        ],
+        "description": "bulk collect"
+    }
+}
